@@ -1,0 +1,431 @@
+FTL Decode
+### Header
+4 bytes         File Version (Currently 09)
+4 bytes         Is Advanced Edition? (BOOL)
+8 bytes         Difficulty (00: Easy, 01: Normal, 02: Hard)
+4 bytes         (guess)         Beacons Explored
+4 bytes         (guess)         Scrap Collected
+4 bytes         (guess)         Total Crew Hired
+4 bytes         String Length (Ship Name)
+n bytes         Ship Name
+4 bytes         String Length (Ship Code)
+n bytes         Ship Code
+4 bytes         (guess)         Sector Number (One-based)
+4 bytes         (unknown)       00 00 00 00
+4 bytes         (unknown)       00 00 00 00
+4 bytes         String Length (Ship Blueprint ID)
+n bytes         Ship Blueprint ID
+4 bytes         String Length (Ship Name)
+n bytes         Ship Name
+4 bytes         String Length (Ship Gfx Base Name)
+n bytes         LShip Gfx Base Name
+# Inital Crew
+4 bytes         Crew Count
+|-4 bytes       String Length (Race)
+|-n bytes       Race
+|-4 bytes       String Length (Name)
+|-n bytes       Name
+### Ship Data
+4 bytes         (unknown)       01 00 00 00
+4 bytes         (unknown)       Differs from AE/NAE (AE:87 00 00 00 | NAE: 08 4C 01)
+8 bytes         (unknown)       All 00
+4 bytes         Health (Hull)
+4 bytes         Fuel
+4 bytes         Drones
+4 bytes         Missiles
+4 bytes         Cash (Scrap)
+### Crew
+4 bytes         Crew Count
+|-4 bytes       String Length (Name)
+|-n bytes       Name
+|-4 bytes       String Length (Race)
+|-n bytes       Race
+|-4 bytes       Enemy Boarding Drone (BOOL)
+|-4 bytes       Health
+|-4 bytes       Sprite X
+|-4 bytes       Sprite Y
+|-4 bytes       Room Id
+|-4 bytes       Room Square
+|-4 bytes       Player Controlled (BOOL)
+|-4 bytes       Clone Ready
+|-4 bytes       Death Order (Same as Clonebay Priority...)
+|-4 bytes       Tint Count
+  |-4bytes      Tint Index
+|-4 bytes       Mind Controlled (BOOL)
+|-4 bytes       Saved Room Square
+|-4 bytes       Saved Room ID
+|-4 bytes       Pilot Skill
+|-4 bytes       Engine Skill
+|-4 bytes       Shield Skill
+|-4 bytes       Weapon Skill
+|-4 bytes       Repair Skill
+|-4 bytes       Combat Skill
+|-4 bytes       Male (BOOL)
+|-4 bytes       Repairs
+|-4 bytes       Combat Kills
+|-4 bytes       Piloted Evasions
+|-4 bytes       Jumps Survived
+|-4 bytes       Skill Masteries
+|-4 bytes       Stun Ticks
+|-4 bytes       Health Boost
+|-4 bytes       Clonebay Priority (Same as Death Order...)
+|-4 bytes       Damage Boost
+|-4 bytes       (unknown)
+|-4 bytes       Universal Death Count
+|-4 bytes       Pilot Master Level 1
+|-4 bytes       Pilot Mastery Level 2
+|-4 bytes       Engine Master Level 1
+|-4 bytes       Engine Mastery Level 2
+|-4 bytes       Shield Master Level 1
+|-4 bytes       Shield Mastery Level 2
+|-4 bytes       Weapon Master Level 1
+|-4 bytes       Weapon Mastery Level 2
+|-4 bytes       Repair Master Level 1
+|-4 bytes       Repair Mastery Level 2
+|-4 bytes       Combat Master Level 1
+|-4 bytes       Combat Mastery Level 2
+|-4 bytes      (unknown) (BOOL)
+|-# bytes       # Teleport Animation
+|-4 bytes       (unknown) (BOOL)
+# -- IF CRYSTAL -- #
+|-4 bytes       Lockdown Recharge Tick
+|-4 bytes       Lockdown Recharge Tick Goal
+|-4 bytes       (unknown)
+# -- /IF CRYSTAL -- #
+4 bytes         Reserve Power Capacity
+### Systems
+# Normally systems are 28 bytes, but if not present on the
+# ship, capacity will be zero, and the system will only
+# occupy the 4 bytes that declared the capacity. And the
+# next system will begin 24 bytes sooner.
+# System info is stored in this order:
+# |-SHIELDS
+# |-ENGINES
+# |-OXYGEN
+# |-WEAPONS
+# |-DRONE_CTRL
+# |-MEDBAY
+# |-PILOT
+# |-SENSORS
+# |-DOORS
+# |-TELEPORTER
+# |-CLOAKING
+# |-ARTILLERY
+# -- IF AE -- #
+# |-BATTERY
+# |-CLONEBAY
+# |-MIND
+# |-HACKING
+# -- /IF AE -- #
+4 bytes         System Capacity
+|-4 bytes       Power
+|-4 bytes       Damage
+|-4 bytes       Ionized
+|-4 bytes       De-ionization Ticks
+|-4 bytes       Repair Progress
+|-4 bytes       Damage Progress
+|-4 bytes       Battery Power Level
+|-4 bytes       Hack Level
+|-4 bytes       Temp Capacity Cap
+|-4 bytes       Temp Capacity Loss
+|-4 bytes       Temp Capacity Divisor
+# Clonebay info (Only if Clonebay Capacity > 0)
+4 bytes         Regen Ticks
+4 bytes         Regen Ticks Goal
+4 bytes         Doom Ticks
+# Battery info (Only if Battery Capacity > 0)
+4 bytes         Active (BOOL)
+4 bytes         Used Battery 
+4 bytes         Discharge Ticks
+# Shield info  (Always, even if Shield Capacity == 0)
+4 bytes         Shield Layers
+4 bytes         Energy Shield Layers
+4 bytes         Energy Shield Max
+4 bytes         Shield Recharge Ticks
+4 bytes         Drop Animation On (BOOL)
+4 bytes         Drop Animation Ticks
+4 bytes         Raise Animation On (BOOL)
+4 bytes         Raise Animation Ticks
+4 bytes         Energy Shield Animation On (BOOL)
+4 bytes         Energy Shield Animation Ticks
+4 bytes         (unknown)
+4 bytes         (unknown)
+# Cloaking info (Only if Cloaking Capacity > 0)
+4 bytes         (unknown)
+4 bytes         (unknown)
+4 bytes         Cloak Ticks Goal
+4 bytes         Cloak Ticks
+### Rooms (Count must be grabbed from layout file)
+|-4 bytes       Oxygen Level
+|-# Number of Squares Grabbed from layout file
+  |-4 bytes     Fire Health
+  |-4 bytes     Ignition Progress
+  |-4 bytes     Extinguishment Progress
+|-4 bytes       Station Square
+|-4 bytes       Station Direction (00: Down, 01: Right, 02:Up, 03: Left, 04: None)
+### Breaches
+4 bytes         Breach Count
+|-4 bytes       Breach X
+|-4 bytes       Breach Y
+|-4 bytes       Breach Health
+### Doors (Count must be grabbed from layout file)
+|-4 bytes       Current Max Health
+|-4 bytes       Health
+|-4 bytes       Nominal Health
+|-4 bytes       Open (BOOL)
+|-4 bytes       Walking Through (BOOL)
+|-4 bytes       (unknown)
+|-4 bytes       (unknown)
+### Cloak Animation
+4 bytes         Cloak Animation Ticks
+### Crystal Lockdown
+4 bytes         Crystal Count
+|-4 bytes       Current Position X
+|-4 bytes       Current Position Y
+|-4 bytes       Speed
+|-4 bytes       Goal Position X
+|-4 bytes       Goal Position Y
+|-4 bytes       Arrived (BOOL)
+|-4 bytes       Done (BOOL)
+|-4 bytes       Lifetime
+|-4 bytes       Super Freeze (BOOL)
+|-4 bytes       Locking Room
+|-4 bytes       Animation Direction
+|-4 bytes       Shard Progress
+### Weapons
+4 bytes         Weapon Count
+|-4 bytes       String Length (Weapon Name)
+|-n bytes       Weapon Name
+|-4 bytes       Armed (00-No 01-YES)
+### Drones
+4 bytes         Drone Count
+|-4 bytes       String Length (Done Type)
+|-n bytes       Drone Type
+|-4 bytes       Armed (BOOL)
+|-4 bytes       Player Controlled (BOOL)
+|-4 bytes       Body X
+|-4 bytes       Body Y
+|-4 bytes       Body Room ID
+|-4 bytes       Body Room Square
+|-4 bytes       Health
+### Augments
+4 bytes         Augment Count
+|-4 bytes       String Length (Augment Name)
+|-n bytes       Augment Name
+### Cargo
+4 bytes         Cargo Count
+|-4 bytes       String Length (Cargo ID)
+|-n bytes       Cargo ID
+### Sector
+4 bytes         Sector Tree Seed
+4 bytes         Sector Layout Seed
+4 bytes         Rebel Fleet Offset
+4 bytes         Rebel Fleet Fudge
+4 bytes         Rebel Pursuit Mod
+4 bytes         Current Beacon ID
+4 bytes         (unknown) (BOOL)
+4 bytes         (unknown)
+4 bytes         Sector Hazards Visible (BOOL)
+4 bytes         Rebel Flagship Visible (BOOL)
+4 bytes         Rebel Flagship Hop
+4 bytes         Rebel Flagship Moving (BOOL)
+4 bytes         (unknown)
+4 bytes         Rebel Flagship Base Turns
+4 bytes         Sector Count
+|-4 bytes       (unknown) (BOOL)
+4 bytes         Sector Number
+4 bytes         Is Sector Hidden Crystal Worlds? (BOOL)
+### Beacons
+4 bytes         Beacon Count
+|-4 bytes       Visit Count
+|-# -- IF Visit Count > 0 -- #
+  |-4 bytes     Bg Starscape Img Inner Path
+  |-4 bytes     Bg Sprite Img Inner Path
+  |-4 bytes     Bg Sprite Pos X
+  |-4 bytes     Bg Sprite Pos Y
+  |-4 bytes     Bg Sprite Rotation
+|-# -- /IF Visit Count > 0 -- #
+|-4 bytes       Seen (BOOL)
+|-4 bytes       Enemy Present (BOOL)
+|-# -- IF Enemy Present -- #
+  |-4 bytes     String Length (Ship Event ID)
+  |-n bytes     Ship Event ID
+  |-4 bytes     String Length (Auto Blueprint ID)
+  |-n bytes     Auto Blueprint ID
+  |-4 bytes     String Length (Ship Event Seed)
+  |-n bytes     Ship Event Seed
+|-# -- /IF Enemy Present -- #
+|-4 bytes       Fleet Presence (00: None, 01: Rebel, 02: Federation, 03: Both)
+|-4 bytes       Under Attack (BOOL)
+|-4 bytes       Store Present (BOOL)
+|-# -- IF Store Present -- #
+  |-4 bytes     Shelf Count
+    |-4 bytes   Item Type (00: Weapon, 01: Drone, 02: Augment, 03: Crew, 04: System)
+    |-# Repeated 3 times
+      |-4 bytes Availability ((-1): No Item, 00: Bought Already, 01: Buyable)
+      |-4 bytes String Length (Item ID)
+      |-n bytes Item ID
+      |-4 bytes Extra Data
+  |-4 bytes     Fuel
+  |-4 bytes     Missiles
+  |-4 bytes     Drone Parts
+|-# -- /IF Store Present -- #
+### Quests
+4 bytes         Quest Event Count
+|-4 bytes       String Length (Quest Event ID)
+|-n bytes       Quest Event ID
+|-4 bytes       Quest Beacon ID
+4 bytes         Distant Quest Event Count
+|-4 bytes       String Length (Distant Quest Event ID)
+|-n bytes       Distant Quest Event ID
+###
+4 bytes         (unknown)
+### Encounter
+4 bytes         Ship Even Seed (Matches Beacon Seed)
+4 bytes         String Length (Surrender Event ID)
+n bytes         Surrender Event ID
+4 bytes         String Length (Escape Event ID)
+n bytes         Escape Event ID
+4 bytes         String Length (Destroyed Event ID)
+n bytes         Destroyed Event ID
+4 bytes         String Length (Dead Crew Event ID)
+n bytes         Dead Crew Event ID
+4 bytes         String Length (Got Away Event ID)
+n bytes         Got Away Event ID
+4 bytes         String Length (Last Event ID)
+n bytes         Last Event ID
+4 bytes         String Length (Text)
+n bytes         Text
+4 bytes         Affected Crew Seed
+4 bytes         Choice Count
+|-4 bytes       Choice ID
+### 
+4 bytes         Ship Nearby (BOOL)
+# -- IF Ship Nearby -- #
+|-4 bytes       Rebel Flagship Nearby (BOOL)
+|-######NEARBY SHIP DETAILS######
+|-# AI Details
+|-4 bytes       Surrendered (BOOL)
+|-4 bytes       Escaping (BOOL)
+|-4 bytes       Destroyed (BOOL)
+|-4 bytes       Surrender Threshold
+|-4 bytes       Escape Threshold
+|-4 bytes       Escape Ticks
+|-4 bytes       Stalemate Triggered (BOOL)
+|-4 bytes       Stalemate Ticks
+|-4 bytes       Boarding Attempts
+|-4 bytes       Boarders Needed
+# -- /IF Ship Nearby -- #
+### Environment
+4 bytes         Red Giant Level
+4 bytes         Pulsar Level
+4 bytes         PDS Level
+4 bytes         Hazard Vulnerability (00: Player Ship, 01: Nearby Ship, 02: Both Ships)
+4 bytes         Asteroids Present (BOOL)
+# -- IF Asteroids Present -- #
+|-4 bytes       (unknown)
+|-4 bytes       Stray Rock Ticks
+|-4 bytes       (unknown)
+|-4 bytes       Bg Drift Ticks
+|-4 bytes       Current Target
+# -- /IF Asteroids Present -- #
+4 bytes         Solar Flare Fade Ticks
+4 bytes         Havoc Ticks
+4 bytes         PDS Ticks
+### Zeus
+4 bytes         Projectile Count
+|-4 bytes       Projectile Type (00: Invalid, 01: Laser/Burst, 02: Rock/Explosion, 03: Missile, 04: Bomb, 05: Beam)
+|-# -- IF NOT Projectile Type == 00 -- #
+  |-4 bytes     Current Position X
+  |-4 bytes     Current Position Y
+  |-4 bytes     Previous Position X
+  |-4 bytes     Previous Position Y
+  |-4 bytes     Speed
+  |-4 bytes     Goal Position X
+  |-4 bytes     Goal Position Y
+  |-4 bytes     Heading
+  |-4 bytes     Owner ID
+  |-4 bytes     Self ID
+  |-4 bytes     Damage
+  |-4 bytes     Lifespan
+  |-4 bytes     Destination Space
+  |-4 bytes     Target ID
+  |-4 bytes     Dead (BOOL)
+  |-4 bytes     String Length (Death Animation ID)
+  |-n bytes     Death Animation ID
+  |-4 bytes     String Length (Flight Animation ID)
+  |-n bytes     Flight Animation ID
+  |-#####DEATH ANIMATION######
+  |-#####FLIGHT ANIMATION######
+  |-4 bytes     Velocity X
+  |-4 bytes     Velocity Y
+  |-4 bytes     Missed
+  |-4 bytes     Hit Target (BOOL)
+  |-4 bytes     String Length (Hit Solid Sound)
+  |-n bytes     Hit Solid Sound
+  |-4 bytes     String Length (Hit Shield Sound)
+  |-n bytes     Hit Shield Sound
+  |-4 bytes     String Length (Miss Sound)
+  |-n bytes     Miss Sound
+  |-4 bytes     Entry Angle
+  |-4 bytes     Started Dying (BOOL)
+  |-4 bytes     Passed Target (BOOL)
+  |-4 bytes     Type
+  |-4 bytes     Broadcast Target (BOOL)
+  |-# Extended Info
+  |-# -- IF Projectile Type == 01 (Laser/Burst) -- #
+    |-4 bytes   (unknown)
+    |-4 bytes   Spin
+  |-# -- IF Projectile Type == 01 (Laser/Burst) -- #
+  |-# -- IF Projectile Type == 04 (Bomb) -- #
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+  |-# -- IF Projectile Type == 04 (Bomb) -- #
+  |-# -- IF Projectile Type == 05 (Beam) -- #
+    |-4 bytes   Firing Ship End X
+    |-4 bytes   Firing Ship End Y
+    |-4 bytes   Target Ship Source X
+    |-4 bytes   Target Ship Source Y
+    |-4 bytes   Target Ship End X
+    |-4 bytes   Target Ship End Y
+    |-4 bytes   (unknown) X
+    |-4 bytes   (unknown) Y
+    |-4 bytes   Swath End X
+    |-4 bytes   Swath End Y
+    |-4 bytes   Swath Start X
+    |-4 bytes   Swath Start Y
+    |-4 bytes   (unknown)
+    |-4 bytes   Swath Length
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown) X
+    |-4 bytes   (unknown) Y
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown)
+    |-4 bytes   (unknown) (BOOL)
+    |-4 bytes   (unknown) (BOOL)
+    |-4 bytes   (unknown) (BOOL)
+    |-4 bytes   (unknown) (BOOL)
+    |-4 bytes   (unknown) (BOOL)
+  |-# -- IF Projectile Type == 05 (Beam) -- #
+|-# -- /IF NOT Type == 00 -- #
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
+4 bytes         
