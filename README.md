@@ -5,11 +5,15 @@ An FTL Save Game modifier for iOS
 
 Description
 ------------
-This is a spare-time project to fill my time now that FTLSaver is working. When finished, this application will hopefully allow the user to modify all aspects of the saved game quickly via an intuative GUI. It should also incorporate FTLSaver's functionality allowing the user to backup and modify from one app.  
+A set of python scripts for reading and writing continue.sav files for the iOS game FTL. May or may not work on the desktop version. 
+
+To use, place the file to be decoded into the Input folder, make any changes you want to main.py and then run main.py. The output file will be placed in the appropriately named output folder.
 
 Caveats and Oddities
 --------------------
-As of yet, I am still experimenting with the Save Game file, attempting to determine its' format. Once I feel I have a decent handle on that, I will begin developing the actual application.
+As of yet, 
+- The script only parses up through the ship info.
+- Room info is ignored, since it requires information from the layout file.
 
 
 License
