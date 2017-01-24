@@ -1,6 +1,18 @@
 from fileUtils import *
 from animation import *
 
+
+# Race Strings:
+# Lanius:  "anaerobic"
+# ?:       "battle"
+# Crystal: "crystal"
+# Engi:    "engi"
+# Human:   "human"
+# Zoltan:  "energy"
+# Mantis:  "mantis"
+# Rockman: "rock"
+# Slug:    "slug"
+
 class InitialCrewMember:
   race = ""
   name = ""
@@ -20,10 +32,10 @@ class CrewMember:
   name = ""
   race = ""
   isEnemyBoardingDrone = False
-  health = 0
-  x = 0
-  y = 0
-  roomID = 0
+  health = 50
+  x = 250
+  y = 250
+  roomID = 2
   roomSquare = 0
   isPlayerControlled = True
   cloneReady = 0
@@ -62,15 +74,23 @@ class CrewMember:
   combatMasteryLvl1 = 0
   combatMasteryLvl2 = 0
   unknown_beta = False
-  teleportAnimation = 0
+  teleportAnimation = Animation()
   unknown_gamma = False
   # Crystal Attributes
   lockdownRechargeTick = 0
   lockdownRechargeTickGoal = 0
   unknown_delta = 0
-  
-  def __init__(self,f):
-    self.read(f)
+
+
+  def frowKwargs(self, **kwargs): 
+    self.__dict__.update(kwargs)
+
+  def __init__(self, *args, **kwargs):
+    if len(args) > 1:
+      raise Warning("Extra positional arguments ignored")
+    if len(args) > 0:
+      self.read(args[0])
+    self.__dict__.update(kwargs)
   
   def read(self,f):
     self.name = getString(f)

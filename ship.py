@@ -153,7 +153,7 @@ class Ship:
       d.write(f)
     writeInt(len(self.augment), f)
     for a in self.augment:
-      a.write(f)
+      writeString(a, f)
     writeInt(len(self.cargo), f)
     for c in self.cargo:
       writeString(c, f)

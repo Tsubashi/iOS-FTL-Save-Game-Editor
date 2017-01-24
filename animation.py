@@ -9,9 +9,13 @@ class Animation:
   x = 0
   y = 0
   
-  def __init__(self,f):
-    self.read(f)
-  
+  def __init__(self, *args, **kwargs):
+    if len(args) > 1:
+      raise Warning("Extra positional arguments ignored")
+    if len(args) > 0:
+      self.read(args[0])
+    self.__dict__.update(kwargs)
+
   def read(self,f):
     self.isPlaying = getBool(f)
     self.isLooping = getBool(f)
