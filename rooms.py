@@ -19,6 +19,11 @@ RoomCount = {
     , "squares": 42
     , "doors": 22
   }
+  , "PLAYER_SHIP_CIRCLE_2": {
+      "rooms": 14
+    , "squares": 32
+    , "doors": 21
+  }
 }          
              
 class RoomSquare:
