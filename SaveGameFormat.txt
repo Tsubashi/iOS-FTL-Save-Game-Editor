@@ -180,9 +180,9 @@ Number - Cloak Ticks
 ### Rooms (Count must be grabbed from layout file)
 |-Number - Oxygen Level
 |-(# of Squares Grabbed from layout file)
-  |-4 bytes     Fire Health
-  |-4 bytes     Ignition Progress
-  |-4 bytes     Extinguishment Progress
+  |-Number - Fire Health
+  |-Number - Ignition Progress
+  |-Number - Extinguishment Progress
 |-Number - Station Square
 |-Number - Station Direction (00: Down, 01: Right, 02:Up, 03: Left, 04: None)
 
@@ -222,14 +222,13 @@ Number - Crystal Count
 ### Weapons
 Number - Weapon Count
 |-String - Weapon Name
-|-Number - Armed (00-No 01-YES)
+|-Boolean - Armed
 
 ### Drones
 Number - Drone Count
-|-Number - String Length (Done Type)
-|-StringDrone Type
-|-Number - Armed (BOOL)
-|-Number - Player Controlled (BOOL)
+|-String - Drone Type
+|-Boolean - Is Armed
+|-Boolean - Is Player Controlled
 |-Number - Body X
 |-Number - Body Y
 |-Number - Body Room ID
@@ -238,12 +237,10 @@ Number - Drone Count
 
 ### Augments
 Number - Augment Count
-|-Number - String Length (Augment Name)
-|-StringAugment Name
+|-String - Augment Name
 
 ### Cargo
 Number - Cargo Count
-|-Number - String Length (Cargo ID)
 |-StringCargo ID
 
 ### Sector
