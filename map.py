@@ -25,10 +25,10 @@ class Sector:
   number = 0
   isCrystalWorlds = False
   
-  class Quest:
-    eventID = 0
-    beaconID = 0
-  
+class Quest:
+  eventID = 0
+  beaconID = 0
+
 class Beacon:
   visitCount = 0
   bgStarscapeInnerPath = 0

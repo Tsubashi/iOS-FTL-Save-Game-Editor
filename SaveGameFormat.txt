@@ -32,7 +32,7 @@ Number - Initial Crew Count
 |-String - Name
 
 ### Ship Data
-Boolean - unknown
+Boolean - Is Hostile
 Number - Jump Charge Ticks
 Boolean - Is Jumping
 Number - Jump Animation Ticks
@@ -113,8 +113,8 @@ Number - Reserve Power Capacity
 ### Systems
 # Normally systems are 28 bytes, but if not present on the
 # ship, capacity will be zero, and the system will only
-# occupy the 4 bytes that declared the capacity. And the
-# next system will begin 24 bytes sooner.
+# occupy the Number - that declared the capacity. And the
+# next system will begin 2Number - sooner.
 # System info is stored in this order:
 # |-SHIELDS
 # |-ENGINES
@@ -144,7 +144,7 @@ Number - Reserve Power Capacity
 |-Number - Battery Power Level
 |-Number - Hack Level
 |-Number - Temp Capacity Cap
-|-Number - Temp Capacity Loss
+|-(8 bytes?) - Temp Capacity Loss
 |-Number - Temp Capacity Divisor
 
 # Clonebay info (Only if Clonebay Capacity > 0)
@@ -222,7 +222,7 @@ Number - Crystal Count
 ### Weapons
 Number - Weapon Count
 |-String - Weapon Name
-|-Boolean - Armed
+|-Boolean - Is Armed
 
 ### Drones
 Number - Drone Count
@@ -241,7 +241,7 @@ Number - Augment Count
 
 ### Cargo
 Number - Cargo Count
-|-StringCargo ID
+|-String - Cargo ID
 
 ### Sector
 Number - Sector Tree Seed
@@ -250,106 +250,102 @@ Number - Rebel Fleet Offset
 Number - Rebel Fleet Fudge
 Number - Rebel Pursuit Mod
 Number - Current Beacon ID
-Number - (unknown) (BOOL)
+Boolean - Is Waiting
+Number - Wait Event Seed
 Number - (unknown)
-Number - Sector Hazards Visible (BOOL)
-Number - Rebel Flagship Visible (BOOL)
+Boolean - Sector Hazards Visible
+Boolean - Rebel Flagship Visible
 Number - Rebel Flagship Hop
-Number - Rebel Flagship Moving (BOOL)
+Boolean - Rebel Flagship Moving
 Number - (unknown)
 Number - Rebel Flagship Base Turns
-Number - Sector Count
-|-Number - (unknown) (BOOL)
-Number - Sector Number
-Number - Is Sector Hidden Crystal Worlds? (BOOL)
+Number - Sector Visitation Count
+|-Boolean - Sector Visited
+Number - Sector Number (Same as the value in the header, except Zero-index )
+Boolean - Is Sector Hidden Crystal Worlds?
 
 ### Beacons
 Number - Beacon Count
 |-Number - Visit Count
-|-# -- IF Visit Count > 0 -- #
-  |-4 bytes     Bg Starscape Img Inner Path
-  |-4 bytes     Bg Sprite Img Inner Path
-  |-4 bytes     Bg Sprite Pos X
-  |-4 bytes     Bg Sprite Pos Y
-  |-4 bytes     Bg Sprite Rotation
+# -- IF Visit Count > 0 -- #
+|-String - Bg Starscape Img Inner Path
+|-String - Bg Sprite Img Inner Path
+|-Number - Bg Sprite Pos X
+|-Number - Bg Sprite Pos Y
+|-Number - Bg Sprite Rotation
 |-# -- /IF Visit Count > 0 -- #
-|-Number - Seen (BOOL)
-|-Number - Enemy Present (BOOL)
-|-# -- IF Enemy Present -- #
-  |-4 bytes     String Length (Ship Event ID)
-  |-n bytes     Ship Event ID
-  |-4 bytes     String Length (Auto BlueprNumber ID)
-  |-n bytes     Auto BlueprNumber ID
-  |-4 bytes     String Length (Ship Event Seed)
-  |-n bytes     Ship Event Seed
+|-Boolean - Seen
+|-Boolean - Enemy Present
+# -- IF Enemy Present -- #
+|-String - Ship Event ID
+|-String - Auto Blueprint ID
+|-String - Ship Event Seed
 |-# -- /IF Enemy Present -- #
 |-Number - Fleet Presence (00: None, 01: Rebel, 02: Federation, 03: Both)
-|-Number - Under Attack (BOOL)
-|-Number - Store Present (BOOL)
+|-Boolean - Under Attack
+|-Boolean - Store Present
 |-# -- IF Store Present -- #
-  |-4 bytes     Shelf Count
-    |-4 bytes   Item Type (00: Weapon, 01: Drone, 02: Augment, 03: Crew, 04: System)
-    |-# Repeated 3 times
-      |-4 bytes Availability ((-1): No Item, 00: Bought Already, 01: Buyable)
-      |-4 bytes String Length (Item ID)
-      |-n bytes Item ID
-      |-4 bytes Extra Data
-  |-4 bytes     Fuel
-  |-4 bytes     Missiles
-  |-4 bytes     Drone Parts
+  |-Number - Shelf Count
+    |-Number - Item Type (00: Weapon, 01: Drone, 02: Augment, 03: Crew, 04: System)
+    |-(# Repeated 3 times)
+      |-Number - Availability ((-1): No Item, 00: Bought Already, 01: Buyable)
+      # -- IF Availability != -1 -- #
+      |-String - Item ID
+      |-Number - Extra Data
+      # -- /IF -- #
+  |-Number - Fuel
+  |-Number - Missiles
+  |-Number - Drone Parts
 |-# -- /IF Store Present -- #
+
 ### Quests
 Number - Quest Event Count
-|-Number - String Length (Quest Event ID)
-|-StringQuest Event ID
+|-String - Quest Event ID
 |-Number - Quest Beacon ID
+
 Number - Distant Quest Event Count
-|-Number - String Length (Distant Quest Event ID)
-|-StringDistant Quest Event ID
+|-String - Distant Quest Event ID
+
 ###
 Number - (unknown)
+
 ### Encounter
 Number - Ship Even Seed (Matches Beacon Seed)
-Number - String Length (Surrender Event ID)
 String - Surrender Event ID
-Number - String Length (Escape Event ID)
 String - Escape Event ID
-Number - String Length (Destroyed Event ID)
 String - Destroyed Event ID
-Number - String Length (Dead Crew Event ID)
 String - Dead Crew Event ID
-Number - String Length (Got Away Event ID)
 String - Got Away Event ID
-Number - String Length (Last Event ID)
 String - Last Event ID
-Number - String Length (Text)
 String - Text
 Number - Affected Crew Seed
 Number - Choice Count
 |-Number - Choice ID
-### 
-Number - Ship Nearby (BOOL)
-# -- IF Ship Nearby -- #
-|-Number - Rebel Flagship Nearby (BOOL)
-|-######NEARBY SHIP DETAILS######
-|-# AI Details
-|-Number - Surrendered (BOOL)
-|-Number - Escaping (BOOL)
-|-Number - Destroyed (BOOL)
+
+### Nearby Ships
+Boolean - Ship Is Nearby
+# -- IF Ship Is Nearby -- #
+|-Boolean - Rebel Flagship is Nearby
+|-######NEARBY SHIP DETAILS (Same as Player Ship details, minus cargo)######
+# AI Details
+|-Boolean - Surrendered
+|-Boolean - Escaping
+|-Boolean - Destroyed
 |-Number - Surrender Threshold
 |-Number - Escape Threshold
 |-Number - Escape Ticks
-|-Number - Stalemate Triggered (BOOL)
+|-Boolean - Stalemate Triggered
 |-Number - Stalemate Ticks
 |-Number - Boarding Attempts
 |-Number - Boarders Needed
 # -- /IF Ship Nearby -- #
+
 ### Environment
-Number - Red Giant Level
-Number - Pulsar Level
-Number - PDS Level
+Boolean - Is Red Giant Present
+Boolean - Is Pulsar Present
+Boolean - Is PDS Present
 Number - Hazard Vulnerability (00: Player Ship, 01: Nearby Ship, 02: Both Ships)
-Number - Asteroids Present (BOOL)
+Boolean - Asteroids Present
 # -- IF Asteroids Present -- #
 |-Number - (unknown)
 |-Number - Stray Rock Ticks
@@ -360,86 +356,100 @@ Number - Asteroids Present (BOOL)
 Number - Solar Flare Fade Ticks
 Number - Havoc Ticks
 Number - PDS Ticks
+
 ### Zeus
 Number - Projectile Count
 |-Number - Projectile Type (00: Invalid, 01: Laser/Burst, 02: Rock/Explosion, 03: Missile, 04: Bomb, 05: Beam)
 |-# -- IF NOT Projectile Type == 00 -- #
-  |-4 bytes     Current Position X
-  |-4 bytes     Current Position Y
-  |-4 bytes     Previous Position X
-  |-4 bytes     Previous Position Y
-  |-4 bytes     Speed
-  |-4 bytes     Goal Position X
-  |-4 bytes     Goal Position Y
-  |-4 bytes     Heading
-  |-4 bytes     Owner ID
-  |-4 bytes     Self ID
-  |-4 bytes     Damage
-  |-4 bytes     Lifespan
-  |-4 bytes     Destination Space
-  |-4 bytes     Target ID
-  |-4 bytes     Dead (BOOL)
-  |-4 bytes     String Length (Death Animation ID)
-  |-n bytes     Death Animation ID
-  |-4 bytes     String Length (Flight Animation ID)
-  |-n bytes     Flight Animation ID
+  |-Number - Current Position X
+  |-Number - Current Position Y
+  |-Number - Previous Position X
+  |-Number - Previous Position Y
+  |-Number - Speed
+  |-Number - Goal Position X
+  |-Number - Goal Position Y
+  |-Number - Heading
+  |-Number - Owner ID
+  |-Number - Self ID
+  # -- Damage Info -- #
+  |-Number - Hull Damage
+  |-Number - Shield Piercing
+  |-Number - Fire Chance
+  |-Number - Breach Chance
+  |-Number - Ion Damage
+  |-Number - System Damage
+  |-Number - Personnel Damage
+  |-Boolean - Hull Buster
+  |-Number - Owner ID
+  |-Number - Self ID
+  |-Boolean - Lockdown
+  |-Boolean - Crystal Shard
+  |-Number - Stun Chance
+  |-Number - Stun 
+  # -- /Damage Info -- #
+  |-Number - Lifespan
+  |-Number - Destination Space
+  |-Number - Target ID
+  |-Boolean - Dead
+  |-String - Death Animation ID
+  |-String - Flight Animation ID
   |-#####DEATH ANIMATION######
   |-#####FLIGHT ANIMATION######
-  |-4 bytes     Velocity X
-  |-4 bytes     Velocity Y
-  |-4 bytes     Missed
-  |-4 bytes     Hit Target (BOOL)
-  |-4 bytes     String Length (Hit Solid Sound)
-  |-n bytes     Hit Solid Sound
-  |-4 bytes     String Length (Hit Shield Sound)
-  |-n bytes     Hit Shield Sound
-  |-4 bytes     String Length (Miss Sound)
-  |-n bytes     Miss Sound
-  |-4 bytes     Entry Angle
-  |-4 bytes     Started Dying (BOOL)
-  |-4 bytes     Passed Target (BOOL)
-  |-4 bytes     Type
-  |-4 bytes     Broadcast Target (BOOL)
+  |-Number - Velocity X
+  |-Number - Velocity Y
+  |-Number - Missed
+  |-Boolean - Hit Target
+  |-String - Hit Solid Sound
+  |-String - Hit Shield Sound
+  |-String - Miss Sound
+  |-Number - Entry Angle
+  |-Boolean - Started Dying
+  |-Boolean - Passed Target
+  |-Number - Type
+  |-Boolean - Broadcast Target
   |-# Extended Info
   |-# -- IF Projectile Type == 01 (Laser/Burst) -- #
-    |-4 bytes   (unknown)
-    |-4 bytes   Spin
-  |-# -- IF Projectile Type == 01 (Laser/Burst) -- #
+    |-Number -   (unknown)
+    |-Number -   Spin
   |-# -- IF Projectile Type == 04 (Bomb) -- #
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-  |-# -- IF Projectile Type == 04 (Bomb) -- #
+    |-Number -   (unknown)
+    |-Number -   (unknown)
+    |-Number -   (unknown)
+    |-Number -   (unknown)
+    |-Boolean -   (unknown)
   |-# -- IF Projectile Type == 05 (Beam) -- #
-    |-4 bytes   Firing Ship End X
-    |-4 bytes   Firing Ship End Y
-    |-4 bytes   Target Ship Source X
-    |-4 bytes   Target Ship Source Y
-    |-4 bytes   Target Ship End X
-    |-4 bytes   Target Ship End Y
-    |-4 bytes   (unknown) X
-    |-4 bytes   (unknown) Y
-    |-4 bytes   Swath End X
-    |-4 bytes   Swath End Y
-    |-4 bytes   Swath Start X
-    |-4 bytes   Swath Start Y
-    |-4 bytes   (unknown)
-    |-4 bytes   Swath Length
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown) X
-    |-4 bytes   (unknown) Y
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown)
-    |-4 bytes   (unknown) (BOOL)
-    |-4 bytes   (unknown) (BOOL)
-    |-4 bytes   (unknown) (BOOL)
-    |-4 bytes   (unknown) (BOOL)
-    |-4 bytes   (unknown) (BOOL)
-  |-# -- IF Projectile Type == 05 (Beam) -- #
+    |-Number -   Firing Ship End X
+    |-Number -   Firing Ship End Y
+    |-Number -   Target Ship Source X
+    |-Number -   Target Ship Source Y
+    |-Number -   Target Ship End X
+    |-Number -   Target Ship End Y
+    |-Number -   (unknown) X
+    |-Number -   (unknown) Y
+    |-Number -   Swath End X
+    |-Number -   Swath End Y
+    |-Number -   Swath Start X
+    |-Number -   Swath Start Y
+    |-Number -   (unknown)
+    |-Number -   Swath Length
+    |-Number -   (unknown)
+    |-Number -   (unknown) X
+    |-Number -   (unknown) Y
+    |-Number -   (unknown)
+    |-Number -   (unknown)
+    |-Number -   (unknown)
+    |-Boolean -   (unknown)
+    |-Boolean -   (unknown)
+    |-Boolean -   (unknown)
+    |-Boolean -   (unknown)
+    |-Boolean -   (unknown)
 |-# -- /IF NOT Type == 00 -- #
+# -- Extended Ship Info -- #
+# There is no explicit count for drones
+|- Boolean - Is Deployed
+|- Boolean - Is Armed
+
+
 Number - 
 Number - 
 Number - 

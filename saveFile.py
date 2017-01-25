@@ -1,36 +1,47 @@
 from enum import IntEnum
-from ship import MainShip
+from ship import Ship
 from map import Sector
+from crew import InitialCrewMember
 from fileUtils import *
-from crew import *
 
 class GameDifficulty(IntEnum):
   Easy   = 0
   Normal = 1
   Hard   = 2
 
+class GameState:
+  id = ""
+  value = 0
+  
+  def __init__(self,f):
+    self.read(f)
+  
+  def read(self,f):
+    self.id = getString(f)
+    self.value = getInt(f)
+  
+  def write(self,f):
+    writeString(self.id, f)
+    writeInt(self.value, f)
+
 class SaveFile:
   ## Header
   fileVersion = 0
   isAE = False
   difficulty = GameDifficulty.Easy
-  unknown_alpha = 0
+  shipsDefeated = 0
   beaconsExplored = 0
   scrapCollected = 0
   totalCrewHired = 0
   shipName = ""
-  shipCode = ""
   sectorNumber = 1 # 1-indexed
   unknown_beta = 0
-  unknown_gamma = 0
-  beaconType = ""
-  shipName2 = ""
+  gameState = []
+  shipBlueprintID = ""
   shipGFXBaseName = ""
-  initalCrew = []
+  initialCrew = []
   ## Ship Data
-  ship = MainShip()
-  cash = 0
-  crew = []
+  mainShip = 0
   sector = Sector()
   beacon = []
   quest = []
@@ -39,29 +50,73 @@ class SaveFile:
   
   def __init__(self, file):
     with open(file, "rb") as f:
+        # Header
         self.fileVersion = getInt(f)
         self.isAE = getBool(f)
+        if not self.isAE:
+          raise Exception("AE not detected")
+        
+        # Game Info
         self.difficulty = getInt(f)
-        self.unknown_alpha = getInt(f)
+        self.shipsDefeated = getInt(f)
         self.beaconsExplored = getInt(f)
         self.scrapCollected = getInt(f)
         self.totalCrewHired = getInt(f)
         self.shipName = getString(f)
-        self.shipCode = getString(f)
+        self.shipBlueprintID = getString(f)
         self.sectorNumber = getInt(f)
         self.unknown_beta = getInt(f)
-        self.unknown_gamma = getInt(f)
-        self.beaconType = getString(f)
-        self.shipName2 = getString(f)
-        if (self.shipName != self.shipName2):
+        
+        # Game State
+        self.gameState = [GameState(f) for i in range(getInt(f))]
+        
+        # Ship Info
+        if self.shipBlueprintID != getString(f):
+          raise Exception("Ship Blueprint ID Mismatch") 
+        if (self.shipName != getString(f)):
           raise Exception("Ship Name Mismatch")
         self.shipGFXBaseName = getString(f)
-        initalCrewCount = getInt(f)
-        for i in initalCrewCount:
-          self.initalCrew[i] = InitialCrewMember()
-          initalCrew[i].read(f)
-        self.ship = Ship()
-        ship.read(f)
+        self.initialCrew = [InitialCrewMember(f) for i in range(getInt(f))]
+        self.mainShip = Ship(self.shipBlueprintID, f)
+        self.mainShip.cargo = [getString(f) for i in range(getInt(f))]
         
-  def toString(self):
-    return self.ship.unknown_alpha
+        
+        
+        # Everything Else
+        self.everythingElse = f.read()
+        
+  def write(self,file):
+    with open(file, "wb") as f:
+      # Header
+        writeInt(self.fileVersion, f)
+        writeBool(self.isAE, f)
+        
+        # Game Info
+        writeInt(self.difficulty, f)
+        writeInt(self.shipsDefeated, f)
+        writeInt(self.beaconsExplored, f)
+        writeInt(self.scrapCollected, f)
+        writeInt(self.totalCrewHired, f)
+        writeString(self.shipName, f)
+        writeString(self.shipBlueprintID, f)
+        writeInt(self.sectorNumber, f)
+        writeInt(self.unknown_beta, f)
+        
+        # Game State
+        writeInt(len(self.gameState), f)
+        for state in self.gameState:
+          state.write(f)
+        
+        # Ship Info
+        writeString(self.shipBlueprintID, f)
+        writeString(self.shipName, f)
+        writeString(self.shipGFXBaseName, f)
+        writeInt(len(self.initialCrew), f)
+        for crew in self.initialCrew:
+          crew.write(f)
+        self.mainShip.write(f)   
+        
+        # Everything Else
+        f.write(self.everythingElse)
+      
+
