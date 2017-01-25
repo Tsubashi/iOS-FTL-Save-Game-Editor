@@ -9,10 +9,16 @@ class StationDirection(IntEnum):
   none  = 4
 
 RoomCount = {
-  "PLAYER_SHIP_HARD": {"rooms": 17
-             ,"squares": 48
-             ,"doors": 26
-             }
+    "PLAYER_SHIP_HARD": {
+        "rooms": 17
+       ,"squares": 48
+       ,"doors": 26
+  }
+  , "PLAYER_SHIP_CIRCLE": {
+      "rooms": 16
+    , "squares": 42
+    , "doors": 22
+  }
 }          
              
 class RoomSquare:
